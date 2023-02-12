@@ -13,14 +13,12 @@ public class ProductoMenu implements Producto {
 
 	@Override
 	public int getPrecio() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.precioBase;
 	}
 
 	@Override
 	public String getNombre() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.nombre;
 	}
 
 	@Override

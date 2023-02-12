@@ -6,13 +6,13 @@ public class Combo implements Producto{
 	
 	private double discount;
 	private String nombre;
-	private ArrayList<ProductoMenu> itemsCombo;
+	private ArrayList<Producto> itemsCombo;
 
 	public Combo(double discount, String nombre) {
 		super();
 		this.discount = discount;
 		this.nombre = nombre;
-		this.itemsCombo = new ArrayList<ProductoMenu>();
+		this.itemsCombo = new ArrayList<Producto>();
 	}
 	
 	public void agregarItemACombo(Producto itemCombo) {
@@ -21,14 +21,16 @@ public class Combo implements Producto{
 
 	@Override
 	public int getPrecio() {
-		// TODO Auto-generated method stub
-		return 0;
+		double total = 0.0;
+		for (Producto p : this.itemsCombo) {
+			total += p.getPrecio();
+		}
+		return (int) (total * (1 - this.discount));
 	}
 
 	@Override
 	public String getNombre() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.nombre;
 	}
 
 	@Override

@@ -1,17 +1,34 @@
 package uniandes.dpoo.taller2.consola;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import uniandes.dpoo.taller2.modelo.Combo;
+import uniandes.dpoo.taller2.modelo.Ingrediente;
+import uniandes.dpoo.taller2.modelo.Producto;
+import uniandes.dpoo.taller2.procesamiento.LoaderData;
+import uniandes.dpoo.taller2.procesamiento.Restaurante;
 
 public class ConsolaHamburguesas {
+	
+	private Restaurante restaurante;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("Funcionando");
+	public static void main(String[] args) throws IOException {
+		ConsolaHamburguesas consola = new ConsolaHamburguesas();
+		consola.ejecutarAplicacion();
 	}
 	
-	public static void mostrarOpciones() {
+	public void cargarDatos() throws IOException {
+		File archivoIngredientes = LoaderData.cargarArchivo("./data/ingredientes.txt");
+		File archivoMenu = LoaderData.cargarArchivo("./data/menu.txt");
+		File archivoCombos = LoaderData.cargarArchivo("./data/combos.txt");
+		this.restaurante.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoCombos);
+	}
+	
+	public void mostrarOpciones() {
 		System.out.println("\nBienvenido a la tienda de Hamburguesas\n");
 		System.out.println("1. Mostrar el menu");
 		System.out.println("2. Hacer un pedido");
@@ -21,19 +38,21 @@ public class ConsolaHamburguesas {
 		System.out.println("0. Salir de la aplicacion");
 	}
 	
-	public void ejecutarOpcion()
+	public void ejecutarAplicacion() throws IOException
 	{
-		System.out.println("Menu de la Tienda\n");
+		Restaurante restaurante = new Restaurante();
+		this.restaurante = restaurante;
+		cargarDatos();
+		mostrarOpciones();
 
 		boolean continuar = true;
 		while (continuar)
 		{
 			try
 			{
-				mostrarMenu();
-				int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+				int opcion_seleccionada = Integer.parseInt(input("\nPor favor seleccione una opción"));
 				if (opcion_seleccionada == 1)
-					System.out.println("3");
+					mostrarMenu();
 				else if (opcion_seleccionada == 2)
 					System.out.println("2");
 				else if (opcion_seleccionada == 3)
@@ -59,8 +78,23 @@ public class ConsolaHamburguesas {
 		}
 	}
 	
-	public static void mostrarMenu() {
-		
+	public void mostrarMenu() {
+		String separator = "-".repeat(40);
+		ArrayList<Producto> productos = this.restaurante.getMenuBase();
+		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " PRODUCTOS", separator));
+		for (Producto p : productos) {
+			System.out.println(String.format("%s: %d", p.getNombre(), p.getPrecio()));
+		}
+		ArrayList<Combo> combos = this.restaurante.getCombos();
+		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " COMBOS", separator));
+		for (Combo c : combos) {
+			System.out.println(String.format("%s: %d", c.getNombre(), c.getPrecio()));
+		}
+		ArrayList<Ingrediente> ingredientes = this.restaurante.getIngredientes();
+		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " ADICIONES", separator));
+		for (Ingrediente i : ingredientes) {
+			System.out.println(String.format("%s: %d", i.getNombre(), i.getCostoAdicional()));
+		}
 	}
 	
 	public String input(String mensaje)
