@@ -6,7 +6,6 @@ public class Ingrediente {
 	private int costoAdicional;
 	
 	public Ingrediente(String nombre, int costoAdicional) {
-		// TODO Auto-generated constructor stub
 		this.nombre = nombre;
 		this.costoAdicional = costoAdicional;
 				
@@ -19,5 +18,9 @@ public class Ingrediente {
 
 	public int getCostoAdicional() {
 		return costoAdicional;
+	}
+	
+	public String generarTextoFactura() {
+		return this.nombre + " " + this.costoAdicional;
 	}
 }

@@ -6,34 +6,71 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import uniandes.dpoo.taller2.modelo.Combo;
 import uniandes.dpoo.taller2.modelo.Ingrediente;
 import uniandes.dpoo.taller2.modelo.Pedido;
 import uniandes.dpoo.taller2.modelo.Producto;
+import uniandes.dpoo.taller2.modelo.ProductoAjustado;
 import uniandes.dpoo.taller2.modelo.ProductoMenu;
 
 public class Restaurante {
 	
-	private ArrayList<Pedido> pedidos;
-	private ArrayList<Ingrediente> ingredientes;
-	private ArrayList<Producto> menuBase;
-	private ArrayList<Combo> combos;
+	private Map<Integer, Pedido> pedidos;
+	private Map<Integer, Ingrediente> ingredientes;
+	private Map<Integer, Producto> menuBase;
+	private Map<Integer, Combo> combos;
+	private int lastProductIdAvalaible;
 	private Pedido pedidoEnCurso;
 	
 	public Restaurante() {
-		this.pedidos = new ArrayList<Pedido>();
-		this.ingredientes = new ArrayList<Ingrediente>();
-		this.menuBase = new ArrayList<Producto>();
-		this.combos = new ArrayList<Combo>();
+		this.pedidos = new HashMap<Integer, Pedido>();
+		this.ingredientes = new HashMap<Integer, Ingrediente>();
+		this.menuBase = new HashMap<Integer, Producto>();
+		this.combos = new HashMap<Integer, Combo>();
+		this.lastProductIdAvalaible = 1;
 	}
 	
-	public void iniciarPedido(String nombreCliente, String direccionCliente) {
+	public void iniciarPedido(String nombreCliente, String direccionCliente, ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
 		this.pedidoEnCurso = new Pedido(nombreCliente, direccionCliente);
+		agregarItemsPedido(combos, productos, adiciones, ingredientesRemovidos);
+	}
+	
+	public void modificarPedido(ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
+		agregarItemsPedido(combos, productos, adiciones, ingredientesRemovidos);
+	}
+	
+	private void agregarItemsPedido(ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
+		for (Integer id : combos) {
+			Combo combo = this.combos.get(id);
+			this.pedidoEnCurso.agregarProducto(combo);
+		}	
+		for (Integer id : productos) {
+			Producto p = this.menuBase.get(id);
+			if (adiciones.size() > 0 || ingredientesRemovidos.size() > 0) {
+				ProductoAjustado pa = new ProductoAjustado((ProductoMenu) p);
+				for (Integer ida : adiciones) {
+					Ingrediente adicion = this.ingredientes.get(ida);
+					pa.agregarIngrediente(adicion);
+				}
+				for (Integer idr : ingredientesRemovidos) {
+					Ingrediente remover = this.ingredientes.get(idr);
+					pa.eliminarIngrediente(remover);
+				}
+				this.pedidoEnCurso.agregarProducto(pa);
+				continue;
+			}
+			this.pedidoEnCurso.agregarProducto(p);
+		}
 	}
 
 	public void cerrarYGuardarPedido() {
-		this.pedidos.add(pedidoEnCurso);
+		int id = lastId() + 1000;
+		this.pedidoEnCurso.setIdPedido(id);
+		System.out.println(this.pedidoEnCurso.generarTextoFactura());
+		this.pedidos.put(id, pedidoEnCurso);
 		this.pedidoEnCurso = null;
 	}
 	
@@ -41,22 +78,22 @@ public class Restaurante {
 		return this.pedidoEnCurso;
 	}
 	
-	public ArrayList<Producto> getMenuBase() {
+	public Map<Integer, Producto> getMenuBase() {
 		return this.menuBase;
 	}
 	
-	public ArrayList<Ingrediente> getIngredientes() {
+	public Map<Integer, Ingrediente> getIngredientes() {
 		return this.ingredientes;
 	}
 	
-	public ArrayList<Combo> getCombos() {
+	public Map<Integer, Combo> getCombos() {
 		return this.combos;
 	}
 	
 	public void cargarInformacionRestaurante(File archivoIngredientes, File archivoMenu, File archivoCombos) throws IOException {
-		cargarIngredientes(archivoIngredientes);
 		cargarMenu(archivoMenu);
 		cargarCombos(archivoCombos);
+		cargarIngredientes(archivoIngredientes);
 	}
 	
 	private void cargarIngredientes(File archivoIngredientes) throws IOException {
@@ -66,7 +103,7 @@ public class Restaurante {
 			String[] info = linea.split(";");
 			int precio = Integer.parseInt(info[1]);
 			Ingrediente ingrediente = new Ingrediente(info[0], precio);
-			this.ingredientes.add(ingrediente);
+			this.ingredientes.put(lastId(), ingrediente);
 			linea = br.readLine();
 		}
 		br.close();
@@ -79,7 +116,7 @@ public class Restaurante {
 			String[] info = linea.split(";");
 			int precio = Integer.parseInt(info[1]);
 			Producto producto = new ProductoMenu(info[0], precio);
-			this.menuBase.add(producto);
+			this.menuBase.put(lastId(), producto);
 			linea = br.readLine();
 		}
 		br.close();
@@ -93,16 +130,22 @@ public class Restaurante {
 			double descuento = (Integer.parseInt(info[1].split("%")[0]) / 100.0);
 			String[] items = Arrays.copyOfRange(info, 2, info.length);
 			Combo combo = new Combo(descuento, info[0]);
-			for (Producto p : this.menuBase) {
+			for (Producto p : this.menuBase.values()) {
 				for (String item: items) {
 					if (item.equals(p.getNombre())) {
 						combo.agregarItemACombo(p);
 					}
 				}
 			}
-			this.combos.add(combo);
+			this.combos.put(lastId(), combo);
 			linea = br.readLine();
 		}
 		br.close();
+	}
+	
+	private int lastId() {
+		int id = this.lastProductIdAvalaible;
+		this.lastProductIdAvalaible += 1;
+		return id;
 	}
 }

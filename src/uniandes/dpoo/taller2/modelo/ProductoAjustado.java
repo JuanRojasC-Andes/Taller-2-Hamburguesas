@@ -14,23 +14,39 @@ public class ProductoAjustado implements Producto {
 		this.agregados = new ArrayList<Ingrediente>();
 		this.eliminados = new ArrayList<Ingrediente>();
 	}
+	
+	public void agregarIngrediente(Ingrediente i) {
+		this.agregados.add(i);
+	}
+	
+	public void eliminarIngrediente(Ingrediente i) {
+		this.eliminados.add(i);
+	}
 
 	@Override
 	public int getPrecio() {
-		// TODO Auto-generated method stub
-		return 0;
+		int precio = base.getPrecio();
+		for (Ingrediente a : agregados) {
+			precio += a.getCostoAdicional();
+		}
+		return precio;
 	}
 
 	@Override
 	public String getNombre() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.base.getNombre();
 	}
 
 	@Override
 	public String generarTextoFactura() {
-		// TODO Auto-generated method stub
-		return null;
+		String texto = this.base.generarTextoFactura();
+		for (Ingrediente a : agregados) {
+			texto += "\n + " + a.generarTextoFactura();
+		}
+		for (Ingrediente a : eliminados) {
+			texto += "\n - " + a.generarTextoFactura();
+		}
+		return texto;
 	}
 
 }

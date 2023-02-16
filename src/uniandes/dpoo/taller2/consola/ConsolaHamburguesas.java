@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Map;
 
 import uniandes.dpoo.taller2.modelo.Combo;
 import uniandes.dpoo.taller2.modelo.Ingrediente;
@@ -54,11 +55,11 @@ public class ConsolaHamburguesas {
 				if (opcion_seleccionada == 1)
 					mostrarMenu();
 				else if (opcion_seleccionada == 2)
-					System.out.println("2");
+					recibirPedido();
 				else if (opcion_seleccionada == 3)
-					System.out.println("3");
+					recibirPedido();
 				else if (opcion_seleccionada == 4)
-					System.out.println("4");
+					cerrarPedido();
 				else if (opcion_seleccionada == 5)
 					System.out.println("5");
 				else if (opcion_seleccionada == 0)
@@ -80,21 +81,69 @@ public class ConsolaHamburguesas {
 	
 	public void mostrarMenu() {
 		String separator = "-".repeat(40);
-		ArrayList<Producto> productos = this.restaurante.getMenuBase();
+		Map<Integer, Producto> productos = this.restaurante.getMenuBase();
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " PRODUCTOS", separator));
-		for (Producto p : productos) {
-			System.out.println(String.format("%s: %d", p.getNombre(), p.getPrecio()));
+		for (Integer key : productos.keySet()) {
+			Producto p = productos.get(key);
+			System.out.println(String.format("%d. %s: %d", key, p.getNombre(), p.getPrecio()));
 		}
-		ArrayList<Combo> combos = this.restaurante.getCombos();
+		Map<Integer, Combo> combos = this.restaurante.getCombos();
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " COMBOS", separator));
-		for (Combo c : combos) {
-			System.out.println(String.format("%s: %d", c.getNombre(), c.getPrecio()));
+		for (Integer key : combos.keySet()) {
+			Combo c = combos.get(key);
+			System.out.println(String.format("%d. %s: %d", key, c.getNombre(), c.getPrecio()));
 		}
-		ArrayList<Ingrediente> ingredientes = this.restaurante.getIngredientes();
+		Map<Integer, Ingrediente> ingredientes = this.restaurante.getIngredientes();
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " ADICIONES", separator));
-		for (Ingrediente i : ingredientes) {
-			System.out.println(String.format("%s: %d", i.getNombre(), i.getCostoAdicional()));
+		for (Integer key : ingredientes.keySet()) {
+			Ingrediente i = ingredientes.get(key);
+			System.out.println(String.format("%d. %s: %d", key, i.getNombre(), i.getCostoAdicional()));
 		}
+	}
+	
+	public void recibirPedido() {
+		System.out.println("\nPara realizar un pedido ingrese el codigo del item segun su categoria, de lo contario deje en blanco y ENTER para continuar\n");
+		System.out.println("Si desea varios items de la misma categoria separe por comas");
+		ArrayList<Integer> combos = validarIds(input("Desea algun combo"));
+		ArrayList<Integer> productosBase = validarIds(input("Desea algun producto"));
+		ArrayList<Integer> adiciones = validarIds(input("Desea adicionar un ingrediente"));
+		ArrayList<Integer> ingredientesRemovidas = validarIds(input("Desea remover un ingrediente"));
+		String nombrecliente = input("\nIngrese su nombre");
+		String direccionCliente = input("Ingrese su direccion");
+		this.restaurante.iniciarPedido(nombrecliente, direccionCliente, combos, productosBase, adiciones, ingredientesRemovidas);
+	}
+	
+	public void modificarPedido() {
+		System.out.println("\nPara modificar un pedido ingrese el codigo del item segun su categoria, de lo contario deje en blanco y ENTER para continuar\n");
+		System.out.println("Si desea varios items de la misma categoria separe por comas");
+		ArrayList<Integer> combos = validarIds(input("Desea algun combo"));
+		ArrayList<Integer> productosBase = validarIds(input("Desea algun producto"));
+		ArrayList<Integer> adiciones = validarIds(input("Desea adicionar un ingrediente"));
+		ArrayList<Integer> ingredientesRemovidas = validarIds(input("Desea remover un ingrediente"));
+		this.restaurante.modificarPedido(combos, productosBase, adiciones, ingredientesRemovidas);
+	}
+	
+	public void cerrarPedido() {
+		this.restaurante.cerrarYGuardarPedido();
+	}
+	
+	private ArrayList<Integer> validarIds(String entrada) {
+		String[] entradas;
+		ArrayList<Integer> ids = new ArrayList<Integer>();
+		try {
+			entradas = entrada.split(",");
+		} catch(Exception e) {
+			return ids;
+		}
+		if (entradas.length <= 0) return ids;
+		for (int i = 0; i < entradas.length; i++) {
+			try {
+				String id = entradas[i];
+				Integer idInt = Integer.parseInt(id);
+				ids.add(idInt);
+			} catch(Exception e) {}
+		}
+		return ids;
 	}
 	
 	public String input(String mensaje)

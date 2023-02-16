@@ -10,16 +10,22 @@ public class Pedido {
 	private String nombreCliente;
 	private String direccionCliente;
 	private ArrayList<Producto> itemsPedido;
+	private double iva;
 	
 	public Pedido(String nombreCliente, String direccionCliente) {
 		super();
 		this.nombreCliente = nombreCliente;
 		this.direccionCliente = direccionCliente;
 		this.itemsPedido = new ArrayList<Producto>();
+		this.iva = 0.19;
 	}
 	
 	public int getIdPedido() {
 		return this.idPedido;
+	}
+	
+	public void setIdPedido(int id) {
+		this.idPedido = id;
 	}
 	
 	public void agregarProducto(Producto nuevoItem) {
@@ -34,15 +40,38 @@ public class Pedido {
 		
 	}
 	
-	private int getPrecioNetoPrdido() {
-		return 0;
+	private double getPrecioNetoPedido() {
+		return getPrecioTotalPedido() - getImpuestos();
 	}
 	
 	private int getPrecioTotalPedido() {
-		return 0;
+		int precio = 0;
+		for (Producto p : itemsPedido) {
+			precio += p.getPrecio();
+		}
+		return precio;
 	}
 	
-	private String generarTextoFactura() {
-		return null;
+	private double getImpuestos() {
+		return getPrecioTotalPedido() * iva;
+	}
+	
+	public String generarTextoFactura() {
+		String texto = "\n" + "=".repeat(20) + "\n"
+				+ "\nTIENDA HAMBURGUESAS\n"
+				+ "Pedido: "
+				+ this.idPedido
+				+ "\n\nITEM   PRECIO\n";
+		for (Producto p : itemsPedido) {
+			texto += "\n" + p.generarTextoFactura();
+		}
+		texto += "\n\n\nNETO   "
+				+ getPrecioNetoPedido()
+				+ "\nIVA   "
+				+ getImpuestos()
+				+ "\nTOTAL   "
+				+ getPrecioTotalPedido()
+				+ "\n\n" + "=".repeat(20);
+		return texto;
 	}
 }
