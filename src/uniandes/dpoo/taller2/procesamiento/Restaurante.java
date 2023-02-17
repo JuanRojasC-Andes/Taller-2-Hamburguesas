@@ -66,10 +66,12 @@ public class Restaurante {
 		}
 	}
 
-	public void cerrarYGuardarPedido() {
-		int id = lastId() + 1000;
+	public void cerrarYGuardarPedido() throws IOException {
+		Integer id = lastId() + 183748;
+		String file = String.format("./data/%d.txt", id);
+		File factura = new File(file);
 		this.pedidoEnCurso.setIdPedido(id);
-		System.out.println(this.pedidoEnCurso.generarTextoFactura());
+		this.pedidoEnCurso.guardarFactura(factura);
 		this.pedidos.put(id, pedidoEnCurso);
 		this.pedidoEnCurso = null;
 	}

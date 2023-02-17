@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import uniandes.dpoo.taller2.modelo.Combo;
@@ -44,13 +45,13 @@ public class ConsolaHamburguesas {
 		Restaurante restaurante = new Restaurante();
 		this.restaurante = restaurante;
 		cargarDatos();
-		mostrarOpciones();
 
 		boolean continuar = true;
 		while (continuar)
 		{
 			try
 			{
+				mostrarOpciones();
 				int opcion_seleccionada = Integer.parseInt(input("\nPor favor seleccione una opción"));
 				if (opcion_seleccionada == 1)
 					mostrarMenu();
@@ -104,27 +105,42 @@ public class ConsolaHamburguesas {
 	public void recibirPedido() {
 		System.out.println("\nPara realizar un pedido ingrese el codigo del item segun su categoria, de lo contario deje en blanco y ENTER para continuar\n");
 		System.out.println("Si desea varios items de la misma categoria separe por comas");
-		ArrayList<Integer> combos = validarIds(input("Desea algun combo"));
-		ArrayList<Integer> productosBase = validarIds(input("Desea algun producto"));
-		ArrayList<Integer> adiciones = validarIds(input("Desea adicionar un ingrediente"));
-		ArrayList<Integer> ingredientesRemovidas = validarIds(input("Desea remover un ingrediente"));
+		Map<String, ArrayList<Integer>> entradas = ejecutarMenuDePedidos();
 		String nombrecliente = input("\nIngrese su nombre");
 		String direccionCliente = input("Ingrese su direccion");
-		this.restaurante.iniciarPedido(nombrecliente, direccionCliente, combos, productosBase, adiciones, ingredientesRemovidas);
+		this.restaurante.iniciarPedido(
+				nombrecliente, 
+				direccionCliente, 
+				entradas.get("combos"), 
+				entradas.get("productosBase"), 
+				entradas.get("adiciones"), 
+				entradas.get("ingredientesRemovidos")
+				);
 	}
 	
 	public void modificarPedido() {
 		System.out.println("\nPara modificar un pedido ingrese el codigo del item segun su categoria, de lo contario deje en blanco y ENTER para continuar\n");
 		System.out.println("Si desea varios items de la misma categoria separe por comas");
-		ArrayList<Integer> combos = validarIds(input("Desea algun combo"));
-		ArrayList<Integer> productosBase = validarIds(input("Desea algun producto"));
-		ArrayList<Integer> adiciones = validarIds(input("Desea adicionar un ingrediente"));
-		ArrayList<Integer> ingredientesRemovidas = validarIds(input("Desea remover un ingrediente"));
-		this.restaurante.modificarPedido(combos, productosBase, adiciones, ingredientesRemovidas);
+		Map<String, ArrayList<Integer>> entradas = ejecutarMenuDePedidos();
+		this.restaurante.modificarPedido(
+				entradas.get("combos"), 
+				entradas.get("productosBase"), 
+				entradas.get("adiciones"), 
+				entradas.get("ingredientesRemovidos")
+				);
 	}
 	
-	public void cerrarPedido() {
+	public void cerrarPedido() throws IOException {
 		this.restaurante.cerrarYGuardarPedido();
+	}
+	
+	private Map<String, ArrayList<Integer>> ejecutarMenuDePedidos() {
+		Map<String, ArrayList<Integer>> entradas = new HashMap<String, ArrayList<Integer>>();
+		entradas.put("combos", validarIds(input("Desea algun combo")));
+		entradas.put("productosBase", validarIds(input("Desea algun producto")));
+		entradas.put("adiciones", validarIds(input("Desea adicionar un ingrediente")));
+		entradas.put("ingredientesRemovidos", validarIds(input("Desea remover un ingrediente")));
+		return entradas;		
 	}
 	
 	private ArrayList<Integer> validarIds(String entrada) {

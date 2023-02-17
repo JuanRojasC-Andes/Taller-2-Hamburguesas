@@ -1,0 +1,26 @@
+
+====================
+
+TIENDA HAMBURGUESAS
+Pedido: 183790
+
+ITEM   PRECIO
+
+combo todoterreno   34317
+ * todoterreno
+ * papas grandes
+ * gaseosa
+combo especial   32084
+ * especial
+ * papas medianas
+ * gaseosa
+wrap de lomo   22000
+ + tocineta picada 6000
+ - cebolla grille 2500
+
+
+NETO   76464.81
+IVA   17936.19
+TOTAL   94401
+
+====================

@@ -1,6 +1,9 @@
 package uniandes.dpoo.taller2.modelo;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Pedido {
@@ -32,8 +35,11 @@ public class Pedido {
 		this.itemsPedido.add(nuevoItem);
 	}
 	
-	public void guardarFactura(File archivo) {
-		
+	public void guardarFactura(File archivo) throws IOException {
+		FileWriter factura = new FileWriter(archivo);
+		BufferedWriter writer = new BufferedWriter(factura);
+		writer.write(generarTextoFactura());
+		writer.close();
 	}
 	
 	public void consultarPedido(int idPedido) {
@@ -56,7 +62,7 @@ public class Pedido {
 		return getPrecioTotalPedido() * iva;
 	}
 	
-	public String generarTextoFactura() {
+	private String generarTextoFactura() {
 		String texto = "\n" + "=".repeat(20) + "\n"
 				+ "\nTIENDA HAMBURGUESAS\n"
 				+ "Pedido: "
