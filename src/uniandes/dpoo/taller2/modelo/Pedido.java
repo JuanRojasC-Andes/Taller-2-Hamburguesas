@@ -79,6 +79,10 @@ public class Pedido {
 				+ "\nTIENDA HAMBURGUESAS\n"
 				+ "Pedido: "
 				+ this.idPedido
+				+ "\nCliente: "
+				+ this.nombreCliente
+				+ "\nDireccion: "
+				+ this.direccionCliente
 				+ "\n\nITEM   PRECIO\n";
 		for (Producto p : itemsPedido) {
 			texto += "\n" + p.generarTextoFactura();
