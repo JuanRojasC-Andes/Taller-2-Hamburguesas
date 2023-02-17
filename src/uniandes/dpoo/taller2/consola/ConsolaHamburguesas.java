@@ -11,7 +11,7 @@ import java.util.Map;
 import uniandes.dpoo.taller2.modelo.Combo;
 import uniandes.dpoo.taller2.modelo.Ingrediente;
 import uniandes.dpoo.taller2.modelo.Producto;
-import uniandes.dpoo.taller2.procesamiento.LoaderData;
+import uniandes.dpoo.taller2.procesamiento.GestorDeArchivos;
 import uniandes.dpoo.taller2.procesamiento.Restaurante;
 
 public class ConsolaHamburguesas {
@@ -24,9 +24,9 @@ public class ConsolaHamburguesas {
 	}
 	
 	public void cargarDatos() throws IOException {
-		File archivoIngredientes = LoaderData.cargarArchivo("./data/ingredientes.txt");
-		File archivoMenu = LoaderData.cargarArchivo("./data/menu.txt");
-		File archivoCombos = LoaderData.cargarArchivo("./data/combos.txt");
+		File archivoIngredientes = GestorDeArchivos.cargarArchivo("./data/ingredientes.txt");
+		File archivoMenu = GestorDeArchivos.cargarArchivo("./data/menu.txt");
+		File archivoCombos = GestorDeArchivos.cargarArchivo("./data/combos.txt");
 		this.restaurante.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoCombos);
 	}
 	
@@ -62,7 +62,7 @@ public class ConsolaHamburguesas {
 				else if (opcion_seleccionada == 4)
 					cerrarPedido();
 				else if (opcion_seleccionada == 5)
-					System.out.println("5");
+					consultarPedido();
 				else if (opcion_seleccionada == 0)
 				{
 					System.out.println("Saliendo de la aplicación ...");
@@ -83,18 +83,20 @@ public class ConsolaHamburguesas {
 	public void mostrarMenu() {
 		String separator = "-".repeat(40);
 		Map<Integer, Producto> productos = this.restaurante.getMenuBase();
+		Map<Integer, Combo> combos = this.restaurante.getCombos();
+		Map<Integer, Ingrediente> ingredientes = this.restaurante.getIngredientes();
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " PRODUCTOS", separator));
 		for (Integer key : productos.keySet()) {
 			Producto p = productos.get(key);
 			System.out.println(String.format("%d. %s: %d", key, p.getNombre(), p.getPrecio()));
 		}
-		Map<Integer, Combo> combos = this.restaurante.getCombos();
+		
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " COMBOS", separator));
 		for (Integer key : combos.keySet()) {
 			Combo c = combos.get(key);
 			System.out.println(String.format("%d. %s: %d", key, c.getNombre(), c.getPrecio()));
 		}
-		Map<Integer, Ingrediente> ingredientes = this.restaurante.getIngredientes();
+
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " ADICIONES", separator));
 		for (Integer key : ingredientes.keySet()) {
 			Ingrediente i = ingredientes.get(key);
@@ -132,6 +134,12 @@ public class ConsolaHamburguesas {
 	
 	public void cerrarPedido() throws IOException {
 		this.restaurante.cerrarYGuardarPedido();
+	}
+	
+	public void consultarPedido() {
+		String entrada = input("Ingresa el numero de tu factura a consultar");
+		Integer idPedido = Integer.parseInt(entrada);
+		this.restaurante.consultarPedido(idPedido);
 	}
 	
 	private Map<String, ArrayList<Integer>> ejecutarMenuDePedidos() {

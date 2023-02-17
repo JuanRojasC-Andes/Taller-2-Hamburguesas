@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import uniandes.dpoo.taller2.modelo.Combo;
 import uniandes.dpoo.taller2.modelo.Ingrediente;
@@ -74,6 +75,10 @@ public class Restaurante {
 		this.pedidoEnCurso.guardarFactura(factura);
 		this.pedidos.put(id, pedidoEnCurso);
 		this.pedidoEnCurso = null;
+	}
+	
+	public void consultarPedido(int idPedido) {
+		Pedido.consultarPedido(idPedido);
 	}
 	
 	public Pedido getPedidoEnCurso() {

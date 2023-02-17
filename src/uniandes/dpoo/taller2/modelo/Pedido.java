@@ -1,10 +1,15 @@
 package uniandes.dpoo.taller2.modelo;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
+import uniandes.dpoo.taller2.procesamiento.GestorDeArchivos;
 
 public class Pedido {
 
@@ -23,6 +28,18 @@ public class Pedido {
 		this.iva = 0.19;
 	}
 	
+	public static void consultarPedido(int idPedido) {
+		String path = String.format("./data/%d.txt", idPedido);
+		try {
+			BufferedReader archivo = GestorDeArchivos.cargarArchivoBuffered(path);
+			String pedido = archivo.lines().collect(Collectors.joining("\n"));
+			System.out.println("Hemos encontrado la factura de tu pedido:");
+			System.out.println(pedido);
+		} catch(Exception e) {
+			System.out.println("Lo sentimos tu pedido no fue encontrado!");
+		}
+	}
+	
 	public int getIdPedido() {
 		return this.idPedido;
 	}
@@ -36,14 +53,9 @@ public class Pedido {
 	}
 	
 	public void guardarFactura(File archivo) throws IOException {
-		FileWriter factura = new FileWriter(archivo);
-		BufferedWriter writer = new BufferedWriter(factura);
-		writer.write(generarTextoFactura());
-		writer.close();
-	}
-	
-	public void consultarPedido(int idPedido) {
-		
+		String factura = generarTextoFactura();
+		System.out.println(factura);
+		GestorDeArchivos.guardarArchivo(archivo.getAbsolutePath(), factura);
 	}
 	
 	private double getPrecioNetoPedido() {
