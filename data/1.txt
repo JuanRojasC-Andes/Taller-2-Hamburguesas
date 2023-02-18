@@ -1,0 +1,27 @@
+
+====================
+
+TIENDA HAMBURGUESAS
+Pedido: 1
+Cliente: juan rojas
+Direccion: calle 2
+
+ITEM   PRECIO
+
+combo corral queso   23850
+ * corral queso
+ * papas medianas
+ * gaseosa
+corral queso   16000
+ + tocineta picada 6000
+ - queso americano 2500
+corral   14000
+ + tocineta picada 6000
+ - cebolla grille 2500
+
+
+NETO   53338.5
+IVA   12511.5
+TOTAL   65850
+
+====================

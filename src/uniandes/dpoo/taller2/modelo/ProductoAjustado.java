@@ -24,7 +24,7 @@ public class ProductoAjustado implements Producto {
 	}
 
 	@Override
-	public int getPrecio() {
+	public Integer getPrecio() {
 		int precio = base.getPrecio();
 		for (Ingrediente a : agregados) {
 			precio += a.getCostoAdicional();

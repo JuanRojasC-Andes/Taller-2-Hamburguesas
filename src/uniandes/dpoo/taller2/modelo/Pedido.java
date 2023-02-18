@@ -13,19 +13,20 @@ import uniandes.dpoo.taller2.procesamiento.GestorDeArchivos;
 
 public class Pedido {
 
-	private int idPedido;
-	private int numeroPedidos;
+	private static Integer numeroPedidos = 0;
+	private static Double iva = 0.19;
+	
+	private Integer idPedido;
 	private String nombreCliente;
 	private String direccionCliente;
 	private ArrayList<Producto> itemsPedido;
-	private double iva;
 	
 	public Pedido(String nombreCliente, String direccionCliente) {
 		super();
+		this.idPedido = numeroPedidos + 1;
 		this.nombreCliente = nombreCliente;
 		this.direccionCliente = direccionCliente;
 		this.itemsPedido = new ArrayList<Producto>();
-		this.iva = 0.19;
 	}
 	
 	public static void consultarPedido(int idPedido) {
@@ -40,29 +41,19 @@ public class Pedido {
 		}
 	}
 	
-	public int getIdPedido() {
+	public Integer getIdPedido() {
 		return this.idPedido;
-	}
-	
-	public void setIdPedido(int id) {
-		this.idPedido = id;
 	}
 	
 	public void agregarProducto(Producto nuevoItem) {
 		this.itemsPedido.add(nuevoItem);
 	}
 	
-	public void guardarFactura(File archivo) throws IOException {
-		String factura = generarTextoFactura();
-		System.out.println(factura);
-		GestorDeArchivos.guardarArchivo(archivo.getAbsolutePath(), factura);
+	private Double getPrecioNetoPedido() {
+		return getPrecioTotalPedido() - getPrecioIVAPedido();
 	}
 	
-	private double getPrecioNetoPedido() {
-		return getPrecioTotalPedido() - getImpuestos();
-	}
-	
-	private int getPrecioTotalPedido() {
+	private Integer getPrecioTotalPedido() {
 		int precio = 0;
 		for (Producto p : itemsPedido) {
 			precio += p.getPrecio();
@@ -70,7 +61,7 @@ public class Pedido {
 		return precio;
 	}
 	
-	private double getImpuestos() {
+	private Double getPrecioIVAPedido() {
 		return getPrecioTotalPedido() * iva;
 	}
 	
@@ -90,10 +81,16 @@ public class Pedido {
 		texto += "\n\n\nNETO   "
 				+ getPrecioNetoPedido()
 				+ "\nIVA   "
-				+ getImpuestos()
+				+ getPrecioIVAPedido()
 				+ "\nTOTAL   "
 				+ getPrecioTotalPedido()
 				+ "\n\n" + "=".repeat(20);
 		return texto;
+	}
+	
+	public void guardarFactura(File archivo) throws IOException {
+		String factura = generarTextoFactura();
+		System.out.println(factura);
+		GestorDeArchivos.guardarArchivo(archivo.getAbsolutePath(), factura);
 	}
 }

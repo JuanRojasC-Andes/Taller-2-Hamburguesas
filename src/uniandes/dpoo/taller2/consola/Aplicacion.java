@@ -14,12 +14,12 @@ import uniandes.dpoo.taller2.modelo.Producto;
 import uniandes.dpoo.taller2.procesamiento.GestorDeArchivos;
 import uniandes.dpoo.taller2.procesamiento.Restaurante;
 
-public class ConsolaHamburguesas {
+public class Aplicacion {
 	
 	private Restaurante restaurante;
 
 	public static void main(String[] args) throws IOException {
-		ConsolaHamburguesas consola = new ConsolaHamburguesas();
+		Aplicacion consola = new Aplicacion();
 		consola.ejecutarAplicacion();
 	}
 	
@@ -58,7 +58,7 @@ public class ConsolaHamburguesas {
 				else if (opcion_seleccionada == 2)
 					recibirPedido();
 				else if (opcion_seleccionada == 3)
-					recibirPedido();
+					modificarPedido();
 				else if (opcion_seleccionada == 4)
 					cerrarPedido();
 				else if (opcion_seleccionada == 5)

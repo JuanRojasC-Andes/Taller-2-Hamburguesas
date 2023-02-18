@@ -23,7 +23,7 @@ public class Restaurante {
 	private Map<Integer, Ingrediente> ingredientes;
 	private Map<Integer, Producto> menuBase;
 	private Map<Integer, Combo> combos;
-	private int lastProductIdAvalaible;
+	private Integer ultimoIdDisponible;
 	private Pedido pedidoEnCurso;
 	
 	public Restaurante() {
@@ -31,7 +31,7 @@ public class Restaurante {
 		this.ingredientes = new HashMap<Integer, Ingrediente>();
 		this.menuBase = new HashMap<Integer, Producto>();
 		this.combos = new HashMap<Integer, Combo>();
-		this.lastProductIdAvalaible = 1;
+		this.ultimoIdDisponible = 1;
 	}
 	
 	public void iniciarPedido(String nombreCliente, String direccionCliente, ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
@@ -68,16 +68,14 @@ public class Restaurante {
 	}
 
 	public void cerrarYGuardarPedido() throws IOException {
-		Integer id = lastId() + 183748;
-		String file = String.format("./data/%d.txt", id);
+		String file = String.format("./data/%d.txt", this.pedidoEnCurso.getIdPedido());
 		File factura = new File(file);
-		this.pedidoEnCurso.setIdPedido(id);
 		this.pedidoEnCurso.guardarFactura(factura);
-		this.pedidos.put(id, pedidoEnCurso);
+		this.pedidos.put(this.pedidoEnCurso.getIdPedido(), pedidoEnCurso);
 		this.pedidoEnCurso = null;
 	}
 	
-	public void consultarPedido(int idPedido) {
+	public void consultarPedido(Integer idPedido) {
 		Pedido.consultarPedido(idPedido);
 	}
 	
@@ -110,7 +108,7 @@ public class Restaurante {
 			String[] info = linea.split(";");
 			int precio = Integer.parseInt(info[1]);
 			Ingrediente ingrediente = new Ingrediente(info[0], precio);
-			this.ingredientes.put(lastId(), ingrediente);
+			this.ingredientes.put(ultimoId(), ingrediente);
 			linea = br.readLine();
 		}
 		br.close();
@@ -123,7 +121,7 @@ public class Restaurante {
 			String[] info = linea.split(";");
 			int precio = Integer.parseInt(info[1]);
 			Producto producto = new ProductoMenu(info[0], precio);
-			this.menuBase.put(lastId(), producto);
+			this.menuBase.put(ultimoId(), producto);
 			linea = br.readLine();
 		}
 		br.close();
@@ -144,15 +142,15 @@ public class Restaurante {
 					}
 				}
 			}
-			this.combos.put(lastId(), combo);
+			this.combos.put(ultimoId(), combo);
 			linea = br.readLine();
 		}
 		br.close();
 	}
 	
-	private int lastId() {
-		int id = this.lastProductIdAvalaible;
-		this.lastProductIdAvalaible += 1;
+	private Integer ultimoId() {
+		Integer id = this.ultimoIdDisponible;
+		this.ultimoIdDisponible += 1;
 		return id;
 	}
 }

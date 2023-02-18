@@ -3,16 +3,16 @@ package uniandes.dpoo.taller2.modelo;
 public class ProductoMenu implements Producto {
 	
 	private String nombre;
-	private int precioBase;
+	private Integer precioBase;
 
-	public ProductoMenu(String nombre, int precioBase) {
+	public ProductoMenu(String nombre, Integer precioBase) {
 		super();
 		this.nombre = nombre;
 		this.precioBase = precioBase;
 	}
 
 	@Override
-	public int getPrecio() {
+	public Integer getPrecio() {
 		return this.precioBase;
 	}
 

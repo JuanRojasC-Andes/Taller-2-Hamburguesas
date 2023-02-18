@@ -3,9 +3,9 @@ package uniandes.dpoo.taller2.modelo;
 public class Ingrediente {
 	
 	private String nombre;
-	private int costoAdicional;
+	private Integer costoAdicional;
 	
-	public Ingrediente(String nombre, int costoAdicional) {
+	public Ingrediente(String nombre, Integer costoAdicional) {
 		this.nombre = nombre;
 		this.costoAdicional = costoAdicional;
 				
@@ -16,7 +16,7 @@ public class Ingrediente {
 	}
 
 
-	public int getCostoAdicional() {
+	public Integer getCostoAdicional() {
 		return costoAdicional;
 	}
 	
