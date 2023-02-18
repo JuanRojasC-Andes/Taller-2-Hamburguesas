@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import uniandes.dpoo.taller2.modelo.Bebida;
 import uniandes.dpoo.taller2.modelo.Combo;
 import uniandes.dpoo.taller2.modelo.Ingrediente;
 import uniandes.dpoo.taller2.modelo.Pedido;
@@ -23,6 +24,7 @@ public class Restaurante {
 	private Map<Integer, Ingrediente> ingredientes;
 	private Map<Integer, Producto> menuBase;
 	private Map<Integer, Combo> combos;
+	private Map<Integer, Bebida> bebidas;
 	private Integer ultimoIdDisponible;
 	private Pedido pedidoEnCurso;
 	
@@ -31,19 +33,20 @@ public class Restaurante {
 		this.ingredientes = new HashMap<Integer, Ingrediente>();
 		this.menuBase = new HashMap<Integer, Producto>();
 		this.combos = new HashMap<Integer, Combo>();
+		this.bebidas = new HashMap<Integer, Bebida>();
 		this.ultimoIdDisponible = 1;
 	}
 	
-	public void iniciarPedido(String nombreCliente, String direccionCliente, ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
+	public void iniciarPedido(String nombreCliente, String direccionCliente, ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos, ArrayList<Integer> bebidas) {
 		this.pedidoEnCurso = new Pedido(nombreCliente, direccionCliente);
-		agregarItemsPedido(combos, productos, adiciones, ingredientesRemovidos);
+		agregarItemsPedido(combos, productos, adiciones, ingredientesRemovidos, bebidas);
 	}
 	
-	public void modificarPedido(ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
-		agregarItemsPedido(combos, productos, adiciones, ingredientesRemovidos);
+	public void modificarPedido(ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos, ArrayList<Integer> bebidas) {
+		agregarItemsPedido(combos, productos, adiciones, ingredientesRemovidos, bebidas);
 	}
 	
-	private void agregarItemsPedido(ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos) {
+	private void agregarItemsPedido(ArrayList<Integer> combos, ArrayList<Integer> productos, ArrayList<Integer> adiciones, ArrayList<Integer> ingredientesRemovidos, ArrayList<Integer> bebidas) {
 		for (Integer id : combos) {
 			Combo combo = this.combos.get(id);
 			this.pedidoEnCurso.agregarProducto(combo);
@@ -64,6 +67,10 @@ public class Restaurante {
 				continue;
 			}
 			this.pedidoEnCurso.agregarProducto(p);
+		}
+		for (Integer id : bebidas) {
+			Bebida bebida = this.bebidas.get(id);
+			this.pedidoEnCurso.agregarProducto(bebida);
 		}
 	}
 
@@ -95,10 +102,15 @@ public class Restaurante {
 		return this.combos;
 	}
 	
-	public void cargarInformacionRestaurante(File archivoIngredientes, File archivoMenu, File archivoCombos) throws IOException {
+	public Map<Integer, Bebida> getBebidas() {
+		return this.bebidas;
+	}
+	
+	public void cargarInformacionRestaurante(File archivoIngredientes, File archivoMenu, File archivoCombos, File archivoBebidas) throws IOException {
 		cargarMenu(archivoMenu);
 		cargarCombos(archivoCombos);
 		cargarIngredientes(archivoIngredientes);
+		cargarBebidas(archivoBebidas);
 	}
 	
 	private void cargarIngredientes(File archivoIngredientes) throws IOException {
@@ -122,6 +134,19 @@ public class Restaurante {
 			int precio = Integer.parseInt(info[1]);
 			Producto producto = new ProductoMenu(info[0], precio);
 			this.menuBase.put(ultimoId(), producto);
+			linea = br.readLine();
+		}
+		br.close();
+	}
+	
+	private void cargarBebidas(File archivoMenu) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(archivoMenu));
+		String linea = br.readLine();
+		while (linea != null) {
+			String[] info = linea.split(";");
+			int precio = Integer.parseInt(info[1]);
+			Bebida bebida = new Bebida(info[0], precio);
+			this.bebidas.put(ultimoId(), bebida);
 			linea = br.readLine();
 		}
 		br.close();

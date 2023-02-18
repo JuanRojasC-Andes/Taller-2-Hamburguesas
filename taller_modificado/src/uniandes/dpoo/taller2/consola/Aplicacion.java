@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import uniandes.dpoo.taller2.modelo.Bebida;
 import uniandes.dpoo.taller2.modelo.Combo;
 import uniandes.dpoo.taller2.modelo.Ingrediente;
 import uniandes.dpoo.taller2.modelo.Producto;
@@ -27,7 +28,8 @@ public class Aplicacion {
 		File archivoIngredientes = GestorDeArchivos.cargarArchivo("./data/ingredientes.txt");
 		File archivoMenu = GestorDeArchivos.cargarArchivo("./data/menu.txt");
 		File archivoCombos = GestorDeArchivos.cargarArchivo("./data/combos.txt");
-		this.restaurante.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoCombos);
+		File archivoBebidas = GestorDeArchivos.cargarArchivo("./data/bebidas.txt");
+		this.restaurante.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoCombos, archivoBebidas);
 	}
 	
 	public void mostrarOpciones() {
@@ -85,6 +87,7 @@ public class Aplicacion {
 		Map<Integer, Producto> productos = this.restaurante.getMenuBase();
 		Map<Integer, Combo> combos = this.restaurante.getCombos();
 		Map<Integer, Ingrediente> ingredientes = this.restaurante.getIngredientes();
+		Map<Integer, Bebida> bebidas = this.restaurante.getBebidas();
 		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " PRODUCTOS", separator));
 		for (Integer key : productos.keySet()) {
 			Producto p = productos.get(key);
@@ -102,6 +105,11 @@ public class Aplicacion {
 			Ingrediente i = ingredientes.get(key);
 			System.out.println(String.format("%d. %s: %d", key, i.getNombre(), i.getCostoAdicional()));
 		}
+		System.out.println(String.format("\n%s\n%s\n%s\n", separator, " BEBIDAS", separator));
+		for (Integer key : bebidas.keySet()) {
+			Bebida b = bebidas.get(key);
+			System.out.println(String.format("%d. %s: %d", key, b.getNombre(), b.getPrecio()));
+		}
 	}
 	
 	public void recibirPedido() {
@@ -116,7 +124,8 @@ public class Aplicacion {
 				entradas.get("combos"), 
 				entradas.get("productosBase"), 
 				entradas.get("adiciones"), 
-				entradas.get("ingredientesRemovidos")
+				entradas.get("ingredientesRemovidos"),
+				entradas.get("bebidas")
 				);
 	}
 	
@@ -128,7 +137,8 @@ public class Aplicacion {
 				entradas.get("combos"), 
 				entradas.get("productosBase"), 
 				entradas.get("adiciones"), 
-				entradas.get("ingredientesRemovidos")
+				entradas.get("ingredientesRemovidos"),
+				entradas.get("bebidas")
 				);
 	}
 	
@@ -148,6 +158,7 @@ public class Aplicacion {
 		entradas.put("productosBase", validarIds(input("Desea algun producto")));
 		entradas.put("adiciones", validarIds(input("Desea adicionar un ingrediente")));
 		entradas.put("ingredientesRemovidos", validarIds(input("Desea remover un ingrediente")));
+		entradas.put("bebidas", validarIds(input("Desea agregar una bebida")));
 		return entradas;		
 	}
 	
