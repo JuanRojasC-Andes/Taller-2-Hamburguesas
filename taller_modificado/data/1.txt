@@ -1,0 +1,24 @@
+
+====================
+
+TIENDA HAMBURGUESAS
+Pedido: 1
+Cliente: juan rojas
+Direccion: calle 12
+
+ITEM   PRECIO
+
+combo especial   32084
+ * especial
+ * papas medianas
+ * gaseosa
+criolla   22000
+ + tocineta picada 6000
+ - cebolla grille 2500
+
+
+NETO   48668.04
+IVA   11415.960000000001
+TOTAL   60084
+
+====================
