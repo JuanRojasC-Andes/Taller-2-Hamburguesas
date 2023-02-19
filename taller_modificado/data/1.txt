@@ -8,17 +8,21 @@ Direccion: calle 12
 
 ITEM   PRECIO
 
-combo especial   27434
- * especial
+combo corral   17550
+ * corral
  * papas medianas
-criolla   22000
- + queso fundido 4500
- - frijol refrito 4500
+costeña   20000
+ + queso mozzarella 2500
+ + tocineta express 2500
+ + papa callejera 2000
+ - cebolla 1000
 gaseosa   5000
 
 
-NETO   47736.54
-IVA   11197.460000000001
-TOTAL   58934
+NETO   40135.5
+IVA   9414.5
+TOTAL   49550
+
+Tu pedido te aportara: 1455
 
 ====================

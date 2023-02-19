@@ -118,8 +118,9 @@ public class Restaurante {
 		String linea = br.readLine();
 		while (linea != null) {
 			String[] info = linea.split(";");
-			int precio = Integer.parseInt(info[1]);
-			Ingrediente ingrediente = new Ingrediente(info[0], precio);
+			Integer precio = Integer.parseInt(info[1]);
+			Integer calorias = Integer.parseInt(info[2]);
+			Ingrediente ingrediente = new Ingrediente(info[0], precio, calorias);
 			this.ingredientes.put(ultimoId(), ingrediente);
 			linea = br.readLine();
 		}
@@ -131,8 +132,9 @@ public class Restaurante {
 		String linea = br.readLine();
 		while (linea != null) {
 			String[] info = linea.split(";");
-			int precio = Integer.parseInt(info[1]);
-			Producto producto = new ProductoMenu(info[0], precio);
+			Integer precio = Integer.parseInt(info[1]);
+			Integer calorias = Integer.parseInt(info[2]);
+			Producto producto = new ProductoMenu(info[0], precio, calorias);
 			this.menuBase.put(ultimoId(), producto);
 			linea = br.readLine();
 		}
@@ -144,8 +146,9 @@ public class Restaurante {
 		String linea = br.readLine();
 		while (linea != null) {
 			String[] info = linea.split(";");
-			int precio = Integer.parseInt(info[1]);
-			Bebida bebida = new Bebida(info[0], precio);
+			Integer precio = Integer.parseInt(info[1]);
+			Integer calorias = Integer.parseInt(info[2]);
+			Bebida bebida = new Bebida(info[0], precio, calorias);
 			this.bebidas.put(ultimoId(), bebida);
 			linea = br.readLine();
 		}

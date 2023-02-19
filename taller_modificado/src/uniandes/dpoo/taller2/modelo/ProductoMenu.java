@@ -1,14 +1,20 @@
 package uniandes.dpoo.taller2.modelo;
 
 public class ProductoMenu implements Producto {
-	
+
 	private String nombre;
 	private Integer precioBase;
-
-	public ProductoMenu(String nombre, Integer precioBase) {
-		super();
+	private Integer calorias;
+	
+	public ProductoMenu(String nombre, Integer precioBase, Integer calorias) {
 		this.nombre = nombre;
 		this.precioBase = precioBase;
+		this.calorias = calorias;
+	}
+
+	@Override
+	public Integer getCalorias() {
+		return this.calorias;
 	}
 
 	@Override

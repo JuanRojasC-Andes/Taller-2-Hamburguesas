@@ -3,24 +3,35 @@ package uniandes.dpoo.taller2.modelo;
 import java.util.ArrayList;
 
 public class ProductoAjustado implements Producto {
-	
+
 	private ProductoMenu base;
 	private ArrayList<Ingrediente> agregados;
 	private ArrayList<Ingrediente> eliminados;
 	
 	public ProductoAjustado(ProductoMenu base) {
-		super();
 		this.base = base;
 		this.agregados = new ArrayList<Ingrediente>();
 		this.eliminados = new ArrayList<Ingrediente>();
 	}
-	
+
 	public void agregarIngrediente(Ingrediente i) {
 		this.agregados.add(i);
 	}
 	
 	public void eliminarIngrediente(Ingrediente i) {
 		this.eliminados.add(i);
+	}
+	
+	@Override
+	public Integer getCalorias() {
+		Integer total = base.getCalorias();
+		for(Ingrediente agregado : this.agregados) {
+			total += agregado.getCalorias();
+		}
+		for(Ingrediente removido : this.eliminados) {
+			total -= removido.getCalorias();
+		}
+		return total;
 	}
 
 	@Override

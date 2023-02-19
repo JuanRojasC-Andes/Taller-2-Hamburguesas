@@ -54,7 +54,7 @@ public class Pedido {
 	}
 	
 	private Integer getPrecioTotalPedido() {
-		int precio = 0;
+		Integer precio = 0;
 		for (Producto p : itemsPedido) {
 			precio += p.getPrecio();
 		}
@@ -63,6 +63,14 @@ public class Pedido {
 	
 	private Double getPrecioIVAPedido() {
 		return getPrecioTotalPedido() * iva;
+	}
+	
+	private Integer getCaloriasPedido() {
+		Integer calorias = 0;
+		for(Producto p : itemsPedido) {
+			calorias += p.getCalorias();
+		}
+		return calorias;
 	}
 	
 	private String generarTextoFactura() {
@@ -84,6 +92,9 @@ public class Pedido {
 				+ getPrecioIVAPedido()
 				+ "\nTOTAL   "
 				+ getPrecioTotalPedido()
+				+ "\n\nTu pedido te aportara "
+				+ getCaloriasPedido()
+				+ " calorias"
 				+ "\n\n" + "=".repeat(20);
 		return texto;
 	}

@@ -9,7 +9,6 @@ public class Combo implements Producto{
 	private ArrayList<ProductoMenu> itemsCombo;
 
 	public Combo(Double descuento, String nombre) {
-		super();
 		this.descuento = descuento;
 		this.nombre = nombre;
 		this.itemsCombo = new ArrayList<ProductoMenu>();
@@ -40,6 +39,15 @@ public class Combo implements Producto{
 			texto += "\n * " + pm.getNombre();
 		}
 		return texto;
+	}
+
+	@Override
+	public Integer getCalorias() {
+		int calorias = 0;
+		for (Producto p : this.itemsCombo) {
+			calorias += p.getCalorias();
+		}
+		return calorias;
 	}
 
 }
