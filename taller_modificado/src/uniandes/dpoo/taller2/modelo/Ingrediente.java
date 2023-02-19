@@ -28,4 +28,14 @@ public class Ingrediente {
 	public String generarTextoFactura() {
 		return this.nombre + " " + this.costoAdicional;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(Ingrediente.class)) return false;
+		Ingrediente i = (Ingrediente) obj;
+		if (i.getNombre() == this.nombre && i.getCostoAdicional() == this.costoAdicional && i.getCalorias() == this.calorias) {
+			return true;
+		}
+		return false;
+ 	}
 }

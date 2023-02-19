@@ -49,5 +49,21 @@ public class Combo implements Producto{
 		}
 		return calorias;
 	}
+	
+	public ArrayList<ProductoMenu> getItemsCombo() {
+		return this.itemsCombo;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(Combo.class)) return false;
+		Combo c = (Combo) obj;
+		for (ProductoMenu pm : this.itemsCombo) {
+			if (!c.getItemsCombo().contains(pm)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

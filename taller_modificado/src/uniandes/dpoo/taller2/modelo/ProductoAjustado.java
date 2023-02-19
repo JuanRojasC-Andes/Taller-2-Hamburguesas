@@ -59,5 +59,30 @@ public class ProductoAjustado implements Producto {
 		}
 		return texto;
 	}
+	
+	public ArrayList<Ingrediente> getAgregados() {
+		return agregados;
+	}
+
+	public ArrayList<Ingrediente> getEliminados() {
+		return eliminados;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(ProductoAjustado.class)) return false;
+		ProductoAjustado pa = (ProductoAjustado) obj;
+		for(Ingrediente agregado : this.agregados) {
+			if (!pa.getAgregados().contains(agregado)) {
+				return false;
+			}
+		}
+		for(Ingrediente removido : this.eliminados) {
+			if (!pa.getEliminados().contains(removido)) { 
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

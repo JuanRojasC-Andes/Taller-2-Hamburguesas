@@ -32,5 +32,14 @@ public class Bebida implements Producto {
 	public String generarTextoFactura() {
 		return this.nombre + "   " + this.precio;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(Bebida.class)) return false;
+		Bebida b = (Bebida) obj;
+		if (b.getNombre() == this.nombre && b.getPrecio() == this.precio && b.getCalorias() == this.calorias) {
+			return true;
+		}
+		return false;
+ 	}
 }

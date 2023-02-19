@@ -31,5 +31,14 @@ public class ProductoMenu implements Producto {
 	public String generarTextoFactura() {
 		return nombre + "   " + precioBase;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(ProductoMenu.class)) return false;
+		ProductoMenu pm = (ProductoMenu) obj;
+		if (pm.getNombre() == this.nombre && pm.getPrecio() == this.precioBase && pm.getCalorias() == this.calorias) {
+			return true;
+		}
+		return false;
+ 	}
 }

@@ -3,26 +3,21 @@
 
 TIENDA HAMBURGUESAS
 Pedido: 1
-Cliente: juan rojas
-Direccion: calle 12
+Cliente: asdf
+Direccion: asdf
 
 ITEM   PRECIO
 
 combo corral   17550
  * corral
  * papas medianas
-costeña   20000
- + queso mozzarella 2500
- + tocineta express 2500
- + papa callejera 2000
- - cebolla 1000
 gaseosa   5000
 
 
-NETO   40135.5
-IVA   9414.5
-TOTAL   49550
+NETO   18265.5
+IVA   4284.5
+TOTAL   22550
 
-Tu pedido te aportara: 1455
+Tu pedido te aportara 710 calorias
 
 ====================

@@ -78,6 +78,7 @@ public class Restaurante {
 		String file = String.format("./data/%d.txt", this.pedidoEnCurso.getIdPedido());
 		File factura = new File(file);
 		this.pedidoEnCurso.guardarFactura(factura);
+		buscarProductoIdentico();
 		this.pedidos.put(this.pedidoEnCurso.getIdPedido(), pedidoEnCurso);
 		this.pedidoEnCurso = null;
 	}
@@ -180,5 +181,15 @@ public class Restaurante {
 		Integer id = this.ultimoIdDisponible;
 		this.ultimoIdDisponible += 1;
 		return id;
+	}
+	
+	private void buscarProductoIdentico() {
+		for(Integer key : this.pedidos.keySet()) {
+			Pedido p = this.pedidos.get(key);
+			if (this.pedidoEnCurso.equals(p)) {
+				System.out.println(":) Hemos encontrado un pedido identico al tuyo en nuestro historial");
+				return;
+			}
+		}
 	}
 }

@@ -104,4 +104,21 @@ public class Pedido {
 		System.out.println(factura);
 		GestorDeArchivos.guardarArchivo(archivo.getAbsolutePath(), factura);
 	}
+	
+	public ArrayList<Producto> getItemsPedido() {
+		return this.itemsPedido;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		Pedido pedidoParaComparar = (Pedido) object;
+		if (pedidoParaComparar.getItemsPedido().size() != this.itemsPedido.size())
+			return false;
+		for(Producto producto: pedidoParaComparar.getItemsPedido()) {
+			if (!this.itemsPedido.contains(producto)) {
+				return false;
+			}
+		}
+		return true; 
+	}
 }
